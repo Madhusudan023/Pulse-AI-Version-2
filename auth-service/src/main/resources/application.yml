@@ -1,0 +1,48 @@
+server:
+  forward-headers-strategy: framework
+  port: 8088
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth_db?createDatabaseIfNotExist=true
+    username: root
+    password: Kishore@052816
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  instance:
+    hostname: localhost
+    preferIpAddress: false
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  expiration: 86400000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+logging:
+  pattern:
+    correlation: "[%X{traceId:-},%X{spanId:-}] "
+
+
+
+

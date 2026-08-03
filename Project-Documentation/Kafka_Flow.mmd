@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant SurveyService
+    participant SentimentService
+    participant KafkaBroker
+    participant NotificationService
+    participant ReportingService
+
+    SurveyService->>KafkaBroker: Publish [SurveyCreatedEvent] to topic 'survey-events'
+    SentimentService->>KafkaBroker: Publish [SentimentAnalyzedEvent] to topic 'sentiment-events'
+    
+    KafkaBroker-->>NotificationService: Consume [SurveyCreatedEvent]
+    NotificationService->>NotificationService: Send Emails/Alerts to Employees
+    
+    KafkaBroker-->>ReportingService: Consume [SentimentAnalyzedEvent]
+    ReportingService->>ReportingService: Update Real-time Dashboards & Averages

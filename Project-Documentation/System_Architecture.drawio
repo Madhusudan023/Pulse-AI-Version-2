@@ -1,0 +1,104 @@
+<mxfile host="app.diagrams.net" modified="2024-05-18T12:00:00.000Z" agent="Mozilla/5.0" version="21.2.9" type="device">
+  <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- External/User -->
+        <mxCell id="Client" value="React / Vite Frontend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="60" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <!-- API Gateway -->
+        <mxCell id="Gateway" value="API Gateway (Port 8080)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="240" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge1" parent="1" source="Client" target="Gateway" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Infrastructure -->
+        <mxCell id="Eureka" value="Eureka Server (8761)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="240" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Config" value="Config Server (8888)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="400" y="160" width="120" height="60" as="geometry" />
+        </mxCell>
+        <!-- Core Microservices -->
+        <mxCell id="AuthService" value="Auth Service (8088)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="480" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EmployeeService" value="Employee Service (8089)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="480" y="320" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SurveyService" value="Survey Service (8092)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="480" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="QBankService" value="Question Bank (8083)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="480" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="SentimentService" value="Sentiment Service (8084)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="480" y="560" width="120" height="60" as="geometry" />
+        </mxCell>
+        <!-- Edges from Gateway -->
+        <mxCell id="edge2" parent="1" source="Gateway" target="AuthService" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" parent="1" source="Gateway" target="EmployeeService" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" parent="1" source="Gateway" target="SurveyService" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" parent="1" source="Gateway" target="QBankService" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge6" parent="1" source="Gateway" target="SentimentService" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Databases -->
+        <mxCell id="MySQL" value="MySQL Databases" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="720" y="320" width="120" height="80" as="geometry" />
+        </mxCell>
+        <!-- Message Broker -->
+        <mxCell id="Kafka" value="Kafka Event Broker (9092)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="720" y="480" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="NotificationService" value="Notification Service (8086)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="960" y="440" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ReportingService" value="Reporting Service (8085)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="960" y="520" width="140" height="60" as="geometry" />
+        </mxCell>
+        <!-- Kafka connections -->
+        <mxCell id="edge7" parent="1" source="SurveyService" target="Kafka" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge8" parent="1" source="SentimentService" target="Kafka" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge9" parent="1" source="Kafka" target="NotificationService" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge10" parent="1" source="Kafka" target="ReportingService" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- DB Connections -->
+        <mxCell id="edge11" parent="1" source="AuthService" target="MySQL" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge12" parent="1" source="EmployeeService" target="MySQL" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge13" parent="1" source="SurveyService" target="MySQL" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- External API -->
+        <mxCell id="GeminiAPI" value="Google Gemini API" style="cloud;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="720" y="600" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge14" parent="1" source="SentimentService" target="GeminiAPI" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

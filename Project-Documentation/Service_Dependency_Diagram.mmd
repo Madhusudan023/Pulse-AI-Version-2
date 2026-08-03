@@ -1,0 +1,26 @@
+graph TD
+    UI[React Frontend] --> GW[API Gateway]
+    GW --> AUTH[Auth Service]
+    GW --> EMP[Employee Service]
+    GW --> SUR[Survey Service]
+    GW --> QB[Question Bank Service]
+    GW --> SENT[Sentiment Service]
+    
+    EMP -. Feign Client .-> AUTH
+    
+    SUR -. Publish .-> KAFKA[Kafka Broker]
+    SENT -. Publish .-> KAFKA
+    
+    KAFKA -. Consume .-> NOTIF[Notification Service]
+    KAFKA -. Consume .-> REP[Reporting Service]
+    
+    SENT --> GEMINI[Google Gemini API]
+    
+    AUTH --> EUREKA[Eureka Server]
+    EMP --> EUREKA
+    SUR --> EUREKA
+    QB --> EUREKA
+    SENT --> EUREKA
+    NOTIF --> EUREKA
+    REP --> EUREKA
+    GW --> EUREKA

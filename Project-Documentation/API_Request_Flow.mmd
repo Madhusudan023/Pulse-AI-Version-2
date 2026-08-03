@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant Client
+    participant API Gateway
+    participant Eureka
+    participant Microservice (Employee)
+    participant Database
+
+    Client->>API Gateway: GET /api/v1/employees/1 (Header: Bearer Token)
+    API Gateway->>API Gateway: JwtAuthenticationFilter Validates Token
+    API Gateway->>Eureka: Fetch instance for 'employee-service'
+    Eureka-->>API Gateway: Return EmployeeService IP & Port
+    API Gateway->>Microservice (Employee): Route Request (Load Balanced)
+    Microservice (Employee)->>Microservice (Employee): Controller -> Service -> Repository
+    Microservice (Employee)->>Database: SELECT * FROM employees WHERE id = 1
+    Database-->>Microservice (Employee): ResultSet
+    Microservice (Employee)-->>API Gateway: 200 OK (Employee DTO)
+    API Gateway-->>Client: 200 OK (JSON Data)

@@ -1,0 +1,19 @@
+sequenceDiagram
+    participant React UI
+    participant API Gateway
+    participant Auth Service
+    participant Database
+
+    React UI->>API Gateway: POST /api/v1/auth/login {email, password}
+    API Gateway->>Auth Service: Route Request
+    Auth Service->>Database: Query UserCredential by email
+    Database-->>Auth Service: Return UserCredential
+    Auth Service->>Auth Service: Compare BCrypt Password Hash
+    alt Password Matches
+        Auth Service->>Auth Service: Generate JWT Token (Claims: role, region, id)
+        Auth Service-->>API Gateway: 200 OK {token, user_details}
+        API Gateway-->>React UI: 200 OK {token}
+    else Password Invalid
+        Auth Service-->>API Gateway: 401 Unauthorized
+        API Gateway-->>React UI: 401 Unauthorized
+    end

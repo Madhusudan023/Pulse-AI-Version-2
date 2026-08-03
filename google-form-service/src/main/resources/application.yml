@@ -1,0 +1,132 @@
+server:
+  forward-headers-strategy: framework
+  port: 8093
+
+spring:
+  application:
+    name: google-form-service
+  batch:
+    jdbc:
+      initialize-schema: always
+  datasource:
+    url: jdbc:mysql://localhost:3306/google_form_db?createDatabaseIfNotExist=true
+    username: root
+    password: Kishore@052816
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: google-form-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: "com.pulseai.surveyservice.dto.event.SurveyPublishedEvent:com.pulseai.googleformservice.kafka.SurveyPublishedEvent,com.pulseai.surveyservice.dto.event.SurveyClosedEvent:com.pulseai.googleformservice.dto.event.SurveyClosedEvent"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: shivanivanga01@gmail.com
+    password: gnqpwobqnyaxqpbz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+eureka:
+  instance:
+    hostname: localhost
+    preferIpAddress: false
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY:AQ.Ab8RN6JAGEM7qPCbv9Rnrp_iUGW1rqhsmfpMQeWTd3YZvOcZmg}
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,circuitbreakers,circuitbreakerevents,metrics
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+logging:
+  file:
+    name: logs/application.log
+  pattern:
+    correlation: "[%X{traceId:-},%X{spanId:-}] "
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+    instances:
+      employee-service:
+        baseConfig: default
+      auth-service:
+        baseConfig: default
+      survey-service:
+        baseConfig: default
+      google-form-service:
+        baseConfig: default
+      question-bank-service:
+        baseConfig: default
+      gemini-api:
+        baseConfig: default
+  retry:
+    instances:
+      employee-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      auth-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      survey-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      google-form-service:
+        maxAttempts: 3
+        waitDuration: 2s
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 30000
+      question-bank-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      gemini-api:
+        maxAttempts: 3
+        waitDuration: 5s
+  timelimiter:
+    instances:
+      default:
+        timeoutDuration: 30s
+  bulkhead:
+    instances:
+      gemini-api:
+        maxConcurrentCalls: 10
+        maxWaitDuration: 0

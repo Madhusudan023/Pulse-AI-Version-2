@@ -1,0 +1,30 @@
+erDiagram
+    Employee {
+        Long id PK
+        String employeeCode UK
+        String firstName
+        String lastName
+        String email UK
+        String designation
+        String department
+        String businessUnit
+        String region
+        Long managerId FK
+        String role
+        LocalDate joiningDate
+        LocalDateTime createdAt
+        LocalDateTime updatedAt
+    }
+
+    UserCredential {
+        Long id PK
+        Long employeeId FK
+        String email UK
+        String password
+        String role
+        String region
+        String department
+        LocalDateTime lastLogin
+    }
+    
+    Employee ||--|| UserCredential : "1 to 1 authentication"

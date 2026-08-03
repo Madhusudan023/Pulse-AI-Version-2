@@ -1,0 +1,117 @@
+server:
+  forward-headers-strategy: framework
+  port: 8086
+
+spring:
+  application:
+    name: notification-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/notification_db?createDatabaseIfNotExist=true
+    username: root
+    password: Kishore@052816
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: "com.pulseai.surveyservice.dto.event.SurveyReminderEvent:com.pulseai.notificationservice.dto.event.SurveyReminderEvent,com.pulseai.surveyservice.dto.event.SurveyPublishedEvent:com.pulseai.notificationservice.dto.event.SurveyPublishedEvent,com.pulseai.surveyservice.dto.event.SurveyCompletedEvent:com.pulseai.notificationservice.dto.event.SurveyCompletedEvent,com.pulseai.reportingservice.dto.event.ReportGeneratedEvent:com.pulseai.notificationservice.dto.event.ReportGeneratedEvent"
+  mail:
+    host: localhost
+    port: 1025 # Default port for MailHog SMTP
+    username: ""
+    password: ""
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+
+eureka:
+  instance:
+    hostname: localhost
+    preferIpAddress: false
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,circuitbreakers,circuitbreakerevents,metrics
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
+logging:
+  pattern:
+    correlation: "[%X{traceId:-},%X{spanId:-}] "
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+    instances:
+      employee-service:
+        baseConfig: default
+      auth-service:
+        baseConfig: default
+      survey-service:
+        baseConfig: default
+      sentiment-service:
+        baseConfig: default
+      question-bank-service:
+        baseConfig: default
+      gemini-api:
+        baseConfig: default
+  retry:
+    instances:
+      employee-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      auth-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      survey-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      sentiment-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      question-bank-service:
+        maxAttempts: 3
+        waitDuration: 2s
+      gemini-api:
+        maxAttempts: 3
+        waitDuration: 5s
+  timelimiter:
+    instances:
+      default:
+        timeoutDuration: 5s
+  bulkhead:
+    instances:
+      gemini-api:
+        maxConcurrentCalls: 10
+        maxWaitDuration: 0
+
+
+
+

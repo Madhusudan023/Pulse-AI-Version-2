@@ -1,0 +1,20 @@
+server:
+  forward-headers-strategy: framework
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/spring-cloud-samples/config-repo
+          # In a real project, this would point to a private repo for configs.
+          # We can also use native profile to read from local file system:
+          # spring.profiles.active: native
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
